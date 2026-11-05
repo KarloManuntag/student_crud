@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @Controller
 @RequestMapping(path="/manuntag/students")
 public class StudentController {

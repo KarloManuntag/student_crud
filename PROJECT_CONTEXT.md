@@ -47,19 +47,8 @@ Base URL: `http://localhost:8080/manuntag/students` (Controller: [`StudentContro
 | `DELETE` | `/manuntag/students/{id}` | Delete student | None | `200 OK` ("Student with id X deleted.") | `404 Not Found` |
 
 ### 2.5 CORS Handling Strategy
-Spring Boot's `StudentController` does not currently include `@CrossOrigin`. To prevent browser CORS issues during development:
-- **Primary Option (Vite Proxy - Recommended):** Configure `vite.config.js` proxy:
-  ```javascript
-  server: {
-    proxy: {
-      '/manuntag': {
-        target: 'http://localhost:8080',
-        changeOrigin: true
-      }
-    }
-  }
-  ```
-- **Secondary Option:** Add `@CrossOrigin(origins = "http://localhost:5173")` to `StudentController.java`.
+`StudentController.java` is annotated with `@CrossOrigin(origins = "*")`, enabling both local frontend access and cloud-deployed frontend access.
+Additionally, Vite's dev proxy forwards `/manuntag` to `http://localhost:8080` during local development, while `studentApi.js` dynamically uses the `VITE_API_BASE_URL` provided by Render in production.
 
 ---
 
@@ -175,3 +164,22 @@ STUDENT-CRUID/
    npm run dev
    ```
 2. Open your browser at `http://localhost:5173`.
+
+---
+
+## 6. Render.com Cloud Deployment
+
+The repository uses **Render Blueprints** via [`render.yaml`](./render.yaml):
+- **Database:** `student-db` (PostgreSQL free tier)
+- **Backend Service:** `student-backend` (Dockerized using `student/Dockerfile`)
+- **Frontend Static Site:** `student-frontend` (Static build from `frontend/dist`)
+
+### Environment Variables on Render
+- Backend reads: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`, `DB_SSL_MODE=require`, and `PORT=8080`.
+- Frontend reads: `VITE_API_BASE_URL` mapped from `student-backend.host`.
+
+### Deployment Steps:
+1. Push repository to GitHub.
+2. In Render dashboard, select **New +** &rarr; **Blueprint**.
+3. Select this repository and click **Apply**.
+
