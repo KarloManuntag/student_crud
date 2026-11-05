@@ -71,49 +71,53 @@ STUDENT-CRUID/
 ├── .gitignore
 ├── PROJECT_CONTEXT.md
 ├── student/                     # Spring Boot Backend
-└── frontend/                    # Vite React Frontend
+└── frontend/                    # Vite React Frontend (Tailwind CSS)
     ├── package.json
     ├── vite.config.js           # Includes dev proxy to backend :8080
+    ├── tailwind.config.js       # Tailwind CSS configuration
+    ├── postcss.config.js
     ├── index.html
     └── src/
         ├── main.jsx
-        ├── App.jsx              # Main dashboard layout & state
-        ├── index.css            # Base styles / Tailwind / modern design
+        ├── App.jsx              # Main dashboard layout (Split card layout: Form + Table)
+        ├── index.css            # Tailwind directives (@tailwind base, etc.)
         ├── api/
         │   └── studentApi.js    # API service calls (fetch/axios)
         ├── components/
-        │   ├── Navbar.jsx       # Header with branding & quick stats
-        │   ├── StudentTable.jsx # Tabular student view with action buttons
-        │   ├── StudentForm.jsx  # Modal or inline form for Create/Edit
-        │   ├── ConfirmModal.jsx # Confirmation dialog for deletion
+        │   ├── Navbar.jsx       # Header with branding & system status
+        │   ├── StudentTable.jsx # Tabular student view with inline action buttons
+        │   ├── StudentForm.jsx  # Card-based form for Create / Edit (NO modal)
         │   ├── SearchBar.jsx    # Search by name, course, or section
-        │   └── Notification.jsx # Toast alerts for success/failure feedback
+        │   └── Notification.jsx # Inline or toast feedback alerts
         └── hooks/
             └── useStudents.js   # Custom hook managing CRUD states & loading
 ```
 
-### 3.2 UI & UX Features Planned
-1. **Student Listing:**
-   - Responsive table displaying ID, First Name, Last Name, Course, Section, and Actions.
-   - Empty state when no records exist.
-   - Loading spinners during network calls.
-2. **Create & Edit Modal/Form:**
-   - Single reusable form for both creating and updating a student.
-   - Client-side validation (all fields required, trimmed strings).
-3. **Delete Confirmation:**
-   - Confirmation modal prevents accidental deletions.
-4. **Search & Filter:**
-   - Instant client-side search across First Name, Last Name, Course, and Section.
+### 3.2 UI & UX Features Planned (Tailwind CSS, Non-Modal Architecture)
+1. **Design System:** Tailwind CSS for a modern, responsive interface with clean typography, subtle borders, and smooth transitions.
+2. **Non-Modal Form (Inline Card):**
+   - Persistent or toggleable card on the page (side-by-side on wide screens, stacked on mobile).
+   - Serves both "Add New Student" and "Edit Student" seamlessly.
+   - Shows active "Editing: [Student Name]" indicator with a clear "Cancel" button to reset back to Add mode without any modal dialogs.
+   - Client-side validation with Tailwind error indicators.
+3. **Non-Modal Delete Confirmation (Inline Row Action):**
+   - Clicking "Delete" replaces the delete button with an in-row prompt: `"Are you sure? [Delete] [Cancel]"` right inside the table row.
+   - Zero modal popups, keeping the workflow fast and non-disruptive.
+4. **Student Listing & Search:**
+   - Responsive Tailwind table with badges for Course and Section.
+   - Instant search filter by First Name, Last Name, Course, and Section.
+   - Loading spinners and empty state illustration when no records match.
 5. **Feedback System:**
-   - Toast banners for success (e.g., "Student created successfully") and errors (e.g., "Failed to connect to backend").
+   - Non-blocking notification banner or floating alert for CRUD results.
 
 ---
 
 ## 4. Step-by-Step Implementation Roadmap
 
-- [ ] **Phase 1: Project Scaffolding**
+- [ ] **Phase 1: Project Scaffolding & Tailwind Setup**
   - Initialize Vite React JavaScript project (`npm create vite@latest frontend -- --template react`).
-  - Install icons/utilities (e.g. `lucide-react` for clean icons).
+  - Install and configure Tailwind CSS (`tailwindcss`, `postcss`, `autoprefixer`).
+  - Install `lucide-react` for modern iconography.
   - Configure `vite.config.js` proxy to redirect `/manuntag` requests to `http://localhost:8080`.
 
 - [ ] **Phase 2: API Client Layer**
@@ -123,18 +127,17 @@ STUDENT-CRUID/
     - `createStudent(payload)`
     - `updateStudent(id, payload)`
     - `deleteStudent(id)`
-  - Implement centralized error handling.
+  - Standardize error handling and network resilience.
 
-- [ ] **Phase 3: Core CRUD State & Components**
-  - Create `StudentTable` with Edit and Delete triggers.
-  - Create `StudentForm` with pre-filled inputs when editing, blank when creating.
-  - Create `ConfirmModal` for safe deletions.
-  - Integrate operations in `App.jsx` or `useStudents` hook.
+- [ ] **Phase 3: Core CRUD State & Non-Modal Components**
+  - Build `StudentForm` as an inline card for Add/Edit student with Tailwind styling and cancel trigger.
+  - Build `StudentTable` with in-row inline delete confirmation (replacing modal popups).
+  - Connect state in `App.jsx` or `useStudents` hook for seamless live list updates.
 
 - [ ] **Phase 4: Search, UX Enhancements & Polish**
-  - Add search bar filtering records in real-time.
-  - Add loading indicators, toast notifications, and form validation warnings.
-  - Implement modern, clean styling (responsive card/table layout).
+  - Add real-time search filtering across First Name, Last Name, Course, and Section.
+  - Add Tailwind badges, loading skeletons, and non-blocking notification banners.
+  - Test responsive desktop split-layout (Form left/top, Table right/bottom).
 
 - [ ] **Phase 5: End-to-End Verification**
   - Verify PostgreSQL DB connection.
