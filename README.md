@@ -91,16 +91,20 @@ Base Endpoint: `/manuntag/students`
 
 This repository includes a [`render.yaml`](file:///C:/Users/Student-00/DA3A/STUDENT-CRUID/render.yaml) blueprint specification:
 1. **Database:** `student-db` (PostgreSQL managed database, free plan)
-2. **Backend Web Service:** `student-backend` (Docker container built from [`student/Dockerfile`](file:///C:/Users/Student-00/DA3A/STUDENT-CRUID/student/Dockerfile))
-3. **Frontend Static Site:** `student-frontend` (Built using `npm run build`, static files served from `frontend/dist`)
+2. **Backend Web Service:** `student-backend` (Docker container scoped with `rootDir: student`, built from [`student/Dockerfile`](file:///C:/Users/Student-00/DA3A/STUDENT-CRUID/student/Dockerfile))
+3. **Frontend Static Site:** `student-frontend` (Static site scoped with `rootDir: frontend`, built using `npm run build`, static files served from `frontend/dist`)
 
 ### Steps to Deploy:
 1. Push this repository to **GitHub** or **GitLab**.
 2. Log in to [Render Dashboard](https://dashboard.render.com).
-3. Click **New +** &rarr; **Blueprint**.
-4. Connect your repository and select the `master` (or `main`) branch.
-5. Render will automatically detect `render.yaml` and provision:
-   - The PostgreSQL database (`student-db`)
-   - The backend service (`student-backend`)
-   - The frontend static site (`student-frontend`)
-6. Click **Apply** to deploy all services together.
+3. Click **New +** &rarr; **Blueprint** (recommended).
+4. Connect your repository and select the `main` branch.
+5. Render will automatically detect `render.yaml` and provision all three services.
+6. Click **Apply**.
+
+> **Note for Manual Web Service setup (if not using Blueprint):**
+> If creating the Web Service manually in the Render dashboard:
+> - **Root Directory:** `student`
+> - **Dockerfile Path:** `./Dockerfile`
+> - **Docker Context:** `.` (or empty)
+> *(Setting Docker Context to `student` while Root Directory is already `student` causes an `lstat /opt/render/project/src/student: no such file or directory` error).*

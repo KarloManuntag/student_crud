@@ -4,8 +4,9 @@ services:
     name: student-backend
     env: docker
     plan: free
-    dockerfilePath: ./student/Dockerfile
-    dockerContext: ./student
+    rootDir: student
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
       - key: DB_HOST
         fromDatabase:
@@ -38,8 +39,9 @@ services:
   - type: web
     name: student-frontend
     env: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
