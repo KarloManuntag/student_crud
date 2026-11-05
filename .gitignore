@@ -1,0 +1,26 @@
+# Vite / Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Spring Boot / Java / Maven
+student/target/
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+Thumbs.db
+.DS_Store
